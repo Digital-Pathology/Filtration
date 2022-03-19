@@ -1,4 +1,3 @@
-
 import abc
 import cv2
 from numbers import Number
@@ -23,7 +22,10 @@ class Filter(abc.ABC):
 
 class FilterBlackAndWhite(Filter):
 
-    def __init__(self, filter_threshold=0.5, binarization_threshold=0.85, rgb_weights=[0.2989, 0.5870, 0.1140]):
+    def __init__(self,
+                 filter_threshold=0.5,
+                 binarization_threshold=0.85,
+                 rgb_weights=[0.2989, 0.5870, 0.1140]):
         """
             Initialize FilterBlackAndWhite Object
             Parameters:
@@ -47,7 +49,7 @@ class FilterBlackAndWhite(Filter):
         greyscale_image = self.convert_rgb_to_greyscale(region)
         # if pixel is > 85% white, set value to 1 else 0
         binary_image = np.where(
-            greyscale_image > self.binarization_threshold*255, 1, 0)
+            greyscale_image > self.binarization_threshold * 255, 1, 0)
         return np.mean(binary_image) < self.filter_threshold
 
     def convert_rgb_to_greyscale(self, region):
@@ -101,7 +103,7 @@ class FilterFocusMeasure(Filter):
 
     def filter(self, region) -> bool:
         """
-            Perform filtration to a region by determining
+            Perform filtration to a region by determining whether it is focused or blurry
             Parameters:
                 region (np.ndarray): numpy array representing the region
             Returns:
