@@ -15,8 +15,9 @@ def test_filter_manager():
     black_and_white_filter: Filter = FilterBlackAndWhite()
     hsv_filter: Filter = FilterHSV()
     focus_measure_filter: Filter = FilterFocusMeasure()
-    filter_manager = FilterManager([black_and_white_filter, hsv_filter, focus_measure_filter])
-    
+    filter_manager = FilterManager(
+        [black_and_white_filter, hsv_filter, focus_measure_filter])
+
     for path in Path(TEST_MEDICAL_DIR).rglob("*.*"):
         absolute_path = str(path.absolute())
         img = cv2.imread(absolute_path)
@@ -25,6 +26,7 @@ def test_filter_manager():
             assert filter_manager.filter(img)
         elif 'fail' in absolute_path:
             assert not filter_manager.filter(img)
+
 
 @pytest.mark.parametrize("test_image, filter_threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 0.4),
@@ -41,9 +43,11 @@ def test_filter_manager():
     (f'{TEST_GENERIC_DIR}/dolphin.jpg', 0.9),
 ])
 def test_filter_threshold_black_and_white_filter_pass(test_image, filter_threshold):
-    black_white_filter: Filter = FilterBlackAndWhite(filter_threshold=filter_threshold)
+    black_white_filter: Filter = FilterBlackAndWhite(
+        filter_threshold=filter_threshold)
     img = Image.open(test_image)
     assert black_white_filter(asarray(img))
+
 
 @pytest.mark.parametrize("test_image, filter_threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 0.05),
@@ -60,9 +64,11 @@ def test_filter_threshold_black_and_white_filter_pass(test_image, filter_thresho
     (f'{TEST_GENERIC_DIR}/dolphin.jpg', 0.0007),
 ])
 def test_filter_threshold_black_and_white_filter_fail(test_image, filter_threshold):
-    black_white_filter: Filter = FilterBlackAndWhite(filter_threshold=filter_threshold)
+    black_white_filter: Filter = FilterBlackAndWhite(
+        filter_threshold=filter_threshold)
     img = Image.open(test_image)
     assert not black_white_filter(asarray(img))
+
 
 @pytest.mark.parametrize("test_image, binarization_threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 0.9),
@@ -78,9 +84,11 @@ def test_filter_threshold_black_and_white_filter_fail(test_image, filter_thresho
     (f'{TEST_GENERIC_DIR}/dolphin.jpg', 1.0),
 ])
 def test_binarization_threshold_black_and_white_filter_pass(test_image, binarization_threshold):
-    black_white_filter: Filter = FilterBlackAndWhite(binarization_threshold=binarization_threshold)
+    black_white_filter: Filter = FilterBlackAndWhite(
+        binarization_threshold=binarization_threshold)
     img = Image.open(test_image)
     assert black_white_filter(asarray(img))
+
 
 @pytest.mark.parametrize("test_image, binarization_threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 0.05),
@@ -96,9 +104,11 @@ def test_binarization_threshold_black_and_white_filter_pass(test_image, binariza
     (f'{TEST_GENERIC_DIR}/dolphin.jpg', 0.6),
 ])
 def test_binarization_threshold_black_and_white_filter_fail(test_image, binarization_threshold):
-    black_white_filter: Filter = FilterBlackAndWhite(binarization_threshold=binarization_threshold)
+    black_white_filter: Filter = FilterBlackAndWhite(
+        binarization_threshold=binarization_threshold)
     img = Image.open(test_image)
     assert not black_white_filter(asarray(img))
+
 
 @pytest.mark.parametrize("test_image, threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 10),
@@ -123,6 +133,7 @@ def test_hsv_filter_pass(test_image, threshold):
     img = Image.open(test_image)
     assert hsv_filter(asarray(img))
 
+
 @pytest.mark.parametrize("test_image, threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 90),
     (f'{TEST_GENERIC_DIR}/cat.jpg', 100),
@@ -141,6 +152,7 @@ def test_hsv_filter_fail(test_image, threshold):
     hsv_filter: Filter = FilterHSV(threshold)
     img = Image.open(test_image)
     assert not hsv_filter(asarray(img))
+
 
 @pytest.mark.parametrize("test_image, threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 1),
@@ -164,6 +176,7 @@ def test_focus_measure_filter_pass(test_image, threshold):
     focus_measure_filter: Filter = FilterFocusMeasure(threshold)
     img = Image.open(test_image)
     assert focus_measure_filter(asarray(img))
+
 
 @pytest.mark.parametrize("test_image, threshold", [
     (f'{TEST_GENERIC_DIR}/cat.jpg', 15),
