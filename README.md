@@ -8,3 +8,5 @@
 * The regions are numpy arrays and consist of RGB values.
 
 ![Tests](https://github.com/Digital-Pathology/Filtration/actions/workflows/tests.yml/badge.svg)
+
+[![Coverage Status](./reports/coverage/coverage-badge.svg?dummy=8484744)](./reports/coverage/index.html)

@@ -22,6 +22,7 @@ RUN pip install tox
 RUN pip install mypy
 RUN pip install pytest
 RUN pip install flake8
+RUN pip install genbadge[all]
 
 
 # COPY ../requirements.txt /tmp

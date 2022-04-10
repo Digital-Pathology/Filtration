@@ -1,3 +1,6 @@
+/tests/test_generic_images
+/tests/test_medical_images
 *.pyc
 *.egg-info
 /.tox
+/htmlcov

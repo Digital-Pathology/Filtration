@@ -117,7 +117,7 @@ class FilterFocusMeasure(Filter):
         :param region: numpy array representing the region
         :type region: np.ndarray
         :return: True if the focus measure is greater than the supplied threshold (image is not
-                considered blurry), else False (image is considred blurry) 
+                considered blurry), else False (image is considered blurry) 
         :rtype: bool
         """
         gray = cv2.cvtColor(region, cv2.COLOR_RGB2GRAY)
