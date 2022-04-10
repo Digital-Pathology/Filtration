@@ -9,4 +9,4 @@
 
 ![Tests](https://github.com/Digital-Pathology/Filtration/actions/workflows/tests.yml/badge.svg)
 
-[![Coverage Status](./reports/coverage/coverage-badge.svg?dummy=8484744)](Filtration/reports/coverage/index.html)
+[![Coverage Status](./reports/coverage/coverage-badge.svg?dummy=8484744)](./Filtration/reports/coverage/index.html)
