@@ -29,7 +29,7 @@ class FilterManager:
         :param region: Calls the filter function.
         :type region: np.ndarray
         """        
-        self.filter(region)
+        return self.filter(region)
 
     def __str__(self):
         """
