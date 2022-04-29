@@ -28,8 +28,8 @@ class FilterManager:
 
         :param region: Calls the filter function.
         :type region: np.ndarray
-        """        
-        self.filter(region)
+        """
+        return self.filter(region)
 
     def __str__(self):
         """
@@ -37,7 +37,7 @@ class FilterManager:
 
         :return: A list of strings representing the filters names
         :rtype: List[str]
-        """        
+        """
         return str([str(f) for f in self.filters])
 
     def add_filter(self, filter: Union[Filter, str]):
@@ -48,7 +48,7 @@ class FilterManager:
         :type filter: Union[Filter, str]
         :raises Exception: This filter does not exist.
         :raises TypeError: This is not a filter.
-        """        
+        """
         filter_classes = {f.__name__: f for f in Filter.__subclasses__()}
         if isinstance(filter, Filter):
             pass
@@ -71,5 +71,5 @@ class FilterManager:
         :type region: np.ndarray
         :return: True if the region passes all of the filters, and false if not.
         :rtype: bool
-        """        
+        """
         return reduce(lambda p, q: p and q, [filter.filter(region) for filter in self.filters])
