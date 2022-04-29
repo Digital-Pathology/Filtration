@@ -6,6 +6,7 @@ import random
 
 # TODO: Add docstrings to all classes, methods, and top of each file
 
+
 class Filter(abc.ABC):
 
     def __call__(self, region) -> bool:
@@ -31,7 +32,7 @@ class FilterBlackAndWhite(Filter):
         :type binarization_threshold: float, optional
         :param rgb_weights: Weighting used for RGB to greyscale conversion, defaults to [0.2989, 0.5870, 0.1140]
         :type rgb_weights: list, optional
-        """        
+        """
         self.filter_threshold = filter_threshold
         self.binarization_threshold = binarization_threshold
         self.rgb_weights = rgb_weights
@@ -44,12 +45,12 @@ class FilterBlackAndWhite(Filter):
         :type region: np.ndarray
         :return: True if the average of the binary region is less than the filter threshold, else False
         :rtype: bool
-        """        
+        """
         greyscale_image = self.convert_rgb_to_greyscale(region)
         # if pixel is > 85% white, set value to 1 else 0
         binary_image = np.where(
             greyscale_image > self.binarization_threshold * 255, 1, 0)
-        return np.mean(binary_image) < self.filter_threshold
+        return bool(np.mean(binary_image) < self.filter_threshold)
 
     def convert_rgb_to_greyscale(self, region):
         """
@@ -59,19 +60,19 @@ class FilterBlackAndWhite(Filter):
         :type region: np.ndarray
         :return: a numpy array representing the region, region is in greyscale
         :rtype: np.ndarray
-        """        
+        """
         return np.uint8(np.dot(region[..., :3], self.rgb_weights))
 
 
 class FilterHSV(Filter):
 
-    def __init__(self, threshold: Number=100) -> None:
+    def __init__(self, threshold: Number = 100) -> None:
         """
         __init__ Initialize FilterHSV Object
 
         :param threshold: Threshold at which image region passes HSV filter, defaults to 100
         :type threshold: Number, optional
-        """        
+        """
         self.threshold = threshold
 
     def filter(self, region) -> bool:
@@ -82,10 +83,10 @@ class FilterHSV(Filter):
         :type region: np.ndarray
         :return: True if the mean of the hues in the hsv region is greather than the threshold, else False
         :rtype: bool
-        """        
+        """
         hsv_img = self.convert_rgb_to_hsv(region)
         hue = hsv_img[:, :, 0]
-        return np.mean(hue) > self.threshold
+        return bool(np.mean(hue) > self.threshold)
 
     def convert_rgb_to_hsv(self, region) -> np.ndarray:
         """
@@ -95,7 +96,7 @@ class FilterHSV(Filter):
         :type region: np.ndarray
         :return: a numpy array representing the region, region consists of HSV values
         :rtype: np.ndarray
-        """        
+        """
         return cv2.cvtColor(region, cv2.COLOR_RGB2HSV)
 
 
@@ -107,7 +108,7 @@ class FilterFocusMeasure(Filter):
 
         :param threshold: Threshold at which image region passes FocusMeasure filter, defaults to 65
         :type threshold: float, optional
-        """        
+        """
         self.threshold = threshold
 
     def filter(self, region) -> bool:
@@ -155,7 +156,7 @@ class FilterRandom(Filter):
 
         :param p: threshold at which to filter randomly, defaults to 0.5
         :type p: Number, optional
-        """        
+        """
         self.p = p
 
     def filter(self, region) -> bool:
@@ -166,5 +167,5 @@ class FilterRandom(Filter):
         :type region: np.ndarray
         :return: Returns a boolean depending on whether RNG picks a number greater than the set threshold
         :rtype: bool
-        """        
+        """
         return random.random() > self.p
