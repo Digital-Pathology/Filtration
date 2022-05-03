@@ -6,6 +6,8 @@ import random
 
 # TODO: Add docstrings to all classes, methods, and top of each file
 
+# Filter.filter() returns True if the region passes the filter
+
 
 class Filter(abc.ABC):
 
