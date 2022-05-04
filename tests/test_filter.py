@@ -15,7 +15,8 @@ def test_filter_manager():
     black_and_white_filter: Filter = FilterBlackAndWhite()
     hsv_filter: Filter = FilterHSV()
     focus_measure_filter: Filter = FilterFocusMeasure()
-    filter_manager = FilterManager([black_and_white_filter, hsv_filter, focus_measure_filter])
+    filter_manager = FilterManager(
+        [black_and_white_filter, hsv_filter, focus_measure_filter])
 
     for path in Path(TEST_MEDICAL_DIR).rglob("*.*"):
         absolute_path = str(path.absolute())
