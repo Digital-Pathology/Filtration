@@ -3,6 +3,8 @@ import cv2
 from numbers import Number
 import numpy as np
 import random
+from PIL.Image import fromarray as PIL_Image_from_array
+from histolab.tile import Tile
 
 # TODO: Add docstrings to all classes, methods, and top of each file
 
@@ -10,19 +12,24 @@ import random
 
 
 class Filter(abc.ABC):
+    """ A abstract base class for all Filters """
 
     def __call__(self, region) -> bool:
+        """ the interface for Filter protocols """
         return self.filter(region)
 
     def __str__(self):
+        """ represent the filter for logging, etc. """
         return f"<{self.__class__.__name__}: {vars(self)}>"
 
     @abc.abstractmethod
     def filter(self, region) -> bool:
+        """ details of the behavior of the Filter """
         pass
 
 
 class FilterBlackAndWhite(Filter):
+    """ Filters out regions with too much whitespace """
 
     def __init__(self, filter_threshold=0.5, binarization_threshold=0.85, rgb_weights=[0.2989, 0.5870, 0.1140]):
         """
@@ -67,6 +74,7 @@ class FilterBlackAndWhite(Filter):
 
 
 class FilterHSV(Filter):
+    """ Filters out regions according to average hue """
 
     def __init__(self, threshold: Number = 100) -> None:
         """
@@ -103,6 +111,7 @@ class FilterHSV(Filter):
 
 
 class FilterFocusMeasure(Filter):
+    """ Filters out regions that are sufficiently out-of-focus """
 
     def __init__(self, threshold=65.0) -> None:
         """
@@ -120,7 +129,7 @@ class FilterFocusMeasure(Filter):
         :param region: numpy array representing the region
         :type region: np.ndarray
         :return: True if the focus measure is greater than the supplied threshold (image is not
-                considered blurry), else False (image is considered blurry) 
+                considered blurry), else False (image is considered blurry)
         :rtype: bool
         """
         gray = cv2.cvtColor(region, cv2.COLOR_RGB2GRAY)
@@ -151,6 +160,7 @@ class FilterFocusMeasure(Filter):
 
 
 class FilterRandom(Filter):
+    """ Decides whether a region passes randomly """
 
     def __init__(self, p: Number = 0.5) -> None:
         """
@@ -171,3 +181,29 @@ class FilterRandom(Filter):
         :rtype: bool
         """
         return random.random() > self.p
+
+
+class FilterHistolab(Filter):
+    """ Applies basic tissue filtration from the Histolab PyPi package """
+
+    def __init__(self, tissue_percentage: float = 0.8) -> None:
+        """
+        __init__ Initialize FilterHistolab Object
+
+        :param tissue_percentage: the percentage of tissue above which regions pass the filter, default 0.8
+        :type filter_threshold: float, optional
+        """
+        self.tissue_percentage = tissue_percentage
+
+    def filter(self, region) -> bool:
+        """
+        filter filters regions based on the histolab package's Tile.has_enough_tissue()
+
+        :param region: the region to which filtration will be applied
+        :type region: np.ndarray
+        """
+        region_tile = Tile(
+            image=PIL_Image_from_array(region),
+            coords=(0, 0)
+        )
+        return region_tile.has_enough_tissue(tissue_percent=self.tissue_percentage)
