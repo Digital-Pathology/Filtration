@@ -4,6 +4,8 @@ from typing import Union
 import numpy as np
 from .filter import Filter
 
+# TODO - apply composite pattern
+
 
 class FilterManager:
 
